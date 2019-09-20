@@ -36,6 +36,8 @@ module.exports = function (ctx) {
         'QAvatar',
         'QTabs',
         'QTab',
+        'QTabPanels',
+        'QTabPanel',
         'QFooter',
         'QLayout',
         'QHeader',
