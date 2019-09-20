@@ -210,7 +210,15 @@ module.exports = function (ctx) {
           target: 'dmg',
         },
         win: {
-          target: 'zip',
+          target: [
+            {
+              target: 'zip',
+              arch: [
+                'x64',
+                'ia32',
+              ],
+            },
+          ],
         },
         linux: {
           target: 'AppImage',

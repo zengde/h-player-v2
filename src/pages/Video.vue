@@ -1,7 +1,13 @@
 <template>
-  <q-page padding class="flex">
+  <q-page
+    padding
+    class="flex"
+  >
     <scrollWarp>
-      <q-scroll-area :thumb-style="thumbStyle" class="fit">
+      <q-scroll-area
+        :thumb-style="thumbStyle"
+        class="fit"
+      >
         <viewArea>
           <hls-player
             :source="normalizeUrl(currentEpisode.url)"
@@ -57,8 +63,16 @@
           transition-next="jump-up"
         >
           <q-tab-panel v-for="(value) in groupEpisodeInfo" :key="value.$.flag" :name="value.$.flag">
-            <q-table :data="value.episodeInfo" :columns="columns" row-key="name">
-              <q-td slot="body-cell-actions" slot-scope="props" :props="props">
+            <q-table
+              :data="value.episodeInfo"
+              :columns="columns"
+              row-key="name"
+            >
+              <q-td
+                slot="body-cell-actions"
+                slot-scope="props"
+                :props="props"
+              >
                 <q-chip
                   v-if="currentEpisode.url === props.row.url"
                   icon="play_arrow"
@@ -75,12 +89,27 @@
             </q-table>
           </q-tab-panel>
         </q-tab-panels>
-
-        <q-page-sticky position="top-left" :offset="[5, 5]">
-          <q-btn round color="accent" icon="arrow_back" @click="goback" />
+        <q-page-sticky
+          position="top-left"
+          :offset="[5, 5]"
+        >
+          <q-btn
+            round
+            color="accent"
+            icon="arrow_back"
+            @click="goback"
+          />
         </q-page-sticky>
-        <q-page-sticky position="top-right" :offset="[5, 5]">
-          <q-btn round color="accent" icon="layers" @click="minimize" />
+        <q-page-sticky
+          position="top-right"
+          :offset="[5, 5]"
+        >
+          <q-btn
+            round
+            color="accent"
+            icon="layers"
+            @click="minimize"
+          />
         </q-page-sticky>
       </q-scroll-area>
     </scrollWarp>
@@ -95,7 +124,7 @@ import normalizeUrl from 'normalize-url';
 import isAbsoluteUrl from 'is-absolute-url';
 import { mapState } from 'vuex';
 import { stringify } from 'query-string';
-import Positioner from 'electron-positioner';
+
 import _find from 'lodash/find';
 import _get from 'lodash/get';
 
@@ -192,7 +221,7 @@ export default {
     },
     normalizeUrl(url) {
       if (isAbsoluteUrl(url)) {
-        return normalizeUrl(url);
+        return normalizeUrl(url, { stripWWW: false });
       }
       return '';
     },
@@ -214,8 +243,8 @@ export default {
       const encodeUrl = stringify({ video: videoInfo, episode: episodeInfo });
       const parentWindow = getCurrentWindow();
       const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 400,
+        height: 300,
         useContentSize: true,
         webPreferences: {
           nodeIntegration: true,
@@ -224,8 +253,6 @@ export default {
         parent: parentWindow,
       });
       win.removeMenu();
-      const positioner = new Positioner(win);
-      positioner.move('bottomRight');
       win.loadURL(`${process.env.APP_URL}#/mini-video?${encodeUrl}`);
     },
     errorHandler(event, data) {
