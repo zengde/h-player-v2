@@ -144,7 +144,14 @@ export default {
           'settings',
           'airplay',
           'fullscreen',
+          'capture',
+          'rotate',
         ],
+        thumbnailCreate: {
+          after: 'download',
+          width: 220,
+          height: 170,
+        },
       },
       columns: [
         {

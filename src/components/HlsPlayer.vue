@@ -11,6 +11,9 @@
 import Hls from 'hls.js';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
+import '../assets/plyr/plyr-plugin-capture';
+import '../assets/plyr/plyr-rotate';
+import '../assets/plyr/plyr-thumbnail-generate';
 
 export default {
   name: 'HlsPlayer',
