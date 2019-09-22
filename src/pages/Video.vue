@@ -122,7 +122,7 @@ import viewArea from 'components/viewArea';
 import HlsPlayer from 'components/HlsPlayer';
 import normalizeUrl from 'normalize-url';
 import isAbsoluteUrl from 'is-absolute-url';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { stringify } from 'query-string';
 
 import _find from 'lodash/find';
@@ -146,6 +146,7 @@ export default {
           'fullscreen',
           'capture',
           'rotate',
+          'download',
         ],
         thumbnailCreate: {
           after: 'download',
@@ -194,6 +195,7 @@ export default {
   },
   mounted() {
     this.initGroup(this.currentVideo);
+    this.addHistory(this.currentVideo);
   },
   watch: {
     currentVideo(currentVideo) {
@@ -202,6 +204,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['addHistory']),
     sliceUrl(str) {
       return str.split('#');
     },

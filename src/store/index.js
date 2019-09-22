@@ -5,6 +5,8 @@ import createLogger from 'vuex/dist/logger';
 import site from './module/site';
 import video from './module/video';
 import app from './module/app';
+import history from './module/history';
+import download from './module/download';
 
 
 Vue.use(Vuex);
@@ -20,6 +22,8 @@ export default function (/* { ssrContext } */) {
       site,
       video,
       app,
+      history,
+      download,
     },
 
     plugins: [createLogger()],

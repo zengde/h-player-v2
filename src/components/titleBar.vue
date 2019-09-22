@@ -17,6 +17,9 @@
       @click="configClick"
     />
 
+    <play-history />
+    <download-queue />
+
     <q-btn
       dense
       flat
@@ -39,6 +42,9 @@
 </template>
 
 <script>
+import PlayHistory from '../layouts/History.vue';
+import DownloadQueue from '../layouts/VideoDownload.vue';
+
 export default {
   name: 'titleBar',
   props: {
@@ -48,6 +54,10 @@ export default {
         return ['config', 'minimize', 'maximize', 'close'];
       },
     },
+  },
+  components: {
+    PlayHistory,
+    DownloadQueue,
   },
   methods: {
     minimize() {
