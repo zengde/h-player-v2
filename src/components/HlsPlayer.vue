@@ -36,6 +36,12 @@ export default {
         return {};
       },
     },
+    startTime: {
+      type: Number,
+      default() {
+        return 0;
+      },
+    },
   },
   data() {
     return {
@@ -48,6 +54,7 @@ export default {
     this.player = new Plyr(this.video, this.options);
     this.$emit('player', this.player);
     this.emit.forEach((element) => {
+      console.dir(this.emitPlayerEvent);
       this.player.on(element, this.emitPlayerEvent);
     });
     this.$once('hook:beforeDestroy', () => {
@@ -90,6 +97,7 @@ export default {
 
         hls.loadSource(this.source);
         hls.attachMedia(this.video);
+        this.video.startTime = this.startTime;
       }
     },
   },

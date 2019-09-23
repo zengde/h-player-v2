@@ -120,7 +120,7 @@
     for (let i = 0; i < rows; i += 1) {
       for (let j = 0; j < cols; j += 1) {
         await new Promise((resolve) => {
-          player.currentTime += inter;
+          player.media.currentTime += inter;
           setTimeout(() => {
             // console.log('cutime--'+player.currentTime)
             const x = j * thumbWidth;

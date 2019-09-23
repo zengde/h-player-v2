@@ -12,6 +12,7 @@
           <hls-player
             :source="normalizeUrl(currentEpisode.url)"
             :options="options"
+            :startTime="startTime"
             @hls-error="errorHandler"
             ref="player"
           ></hls-player>
@@ -135,7 +136,9 @@ export default {
       options: {
         controls: [
           'play-large',
+          'rewind',
           'play',
+          'fast-forward',
           'progress',
           'current-time',
           'mute',
@@ -186,6 +189,7 @@ export default {
       },
       groupEpisodeInfo: [],
       currentEpisodeGroup: '',
+      startTime: 0,
     };
   },
   components: {
@@ -194,8 +198,7 @@ export default {
     viewArea,
   },
   mounted() {
-    this.initGroup(this.currentVideo);
-    this.addHistory(this.currentVideo);
+    this.initGroup(this.currentVideo, this.$route.query.h);
   },
   watch: {
     currentVideo(currentVideo) {
@@ -274,18 +277,24 @@ export default {
         });
       }
     },
-    initGroup(video) {
+    initGroup(video, history = '0') {
       const groups = _get(video, 'dl[0].dd', []);
       groups.map((element) => {
-        console.dir(element);
         const uris = _get(element, '_', '');
         element.episodeInfo = this.initUrl(uris);
         return element;
       });
       this.groupEpisodeInfo = groups;
-      const [currentGroup] = this.groupEpisodeInfo;
-      this.currentEpisodeGroup = currentGroup.$.flag;
-      [this.currentEpisode] = currentGroup.episodeInfo;
+      if (history === '1') {
+        this.currentEpisodeGroup = video.currentEpisodeGroup;
+        this.currentEpisode = video.currentEpisode;
+        this.startTime = video.startTime;
+      } else {
+        const [currentGroup] = this.groupEpisodeInfo;
+        this.currentEpisodeGroup = currentGroup.$.flag;
+        [this.currentEpisode] = currentGroup.episodeInfo;
+        this.startTime = 0;
+      }
     },
   },
   computed: {
@@ -301,6 +310,18 @@ export default {
         opacity: 0.75,
       };
     },
+  },
+  beforeDestroy() {
+    console.log('destroyed');
+    const startTime = this.$refs.player.video.currentTime;
+    const { currentEpisodeGroup, currentEpisode } = this;
+    const currentVideo = {
+      ...this.currentVideo,
+      currentEpisodeGroup,
+      currentEpisode,
+      startTime,
+    };
+    this.addHistory(currentVideo);
   },
 };
 </script>
