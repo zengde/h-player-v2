@@ -104,7 +104,7 @@
     const [totalWidth, totalHeight] = [cols * thumbWidth, rows * thumbHeight];
 
     const { duration, startTime } = player;
-    const inter = duration / total;
+    const inter = parseInt(duration / total, 10);
     // console.dir('duration--'+duration)
     // console.dir('inter--'+inter)
     // console.dir('matix--'+rows+','+cols)
@@ -121,14 +121,14 @@
       for (let j = 0; j < cols; j += 1) {
         await new Promise((resolve) => {
           player.media.currentTime += inter;
-          setTimeout(() => {
+          player.once('seeked', () => {
             // console.log('cutime--'+player.currentTime)
             const x = j * thumbWidth;
             const y = i * thumbHeight;
             // console.log('x,y--'+x+','+y)
             canvasCtx.drawImage(player.media, x, y, thumbWidth, thumbHeight);
             resolve(true);
-          }, 1000);
+          });
         });
       }
     }
@@ -167,7 +167,7 @@
     }());
   }
 
-  // chrome &#19978;&#35774;&#32622;currentTime&#22833;&#25928; &#35299;&#20915;&#26041;&#27861; &#23558;video src&#25913;&#20026;&#22312;&#32447;&#35270;&#39057;&#23436;&#25972;&#24341;&#29992;&#22320;&#22336;
+  // chrome 上设置currentTime失效 解决方法 将video src改为在线视频完整引用地址
   document.addEventListener('ready', (event) => {
     const curPlayer = event.detail.plyr;
     // const { config } = curPlayer;
@@ -194,7 +194,9 @@
       }
       const { target } = e;
       if (target && target.classList.contains('cls-context-item')) {
-        capture(curPlayer, '&#32553;&#30053;&#22270;', target.textContent);
+        const d = new Date();
+        const filename = `缩略图${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}${d.getHours()}${d.getMinutes()}`;
+        capture(curPlayer, filename, target.textContent);
       }
     });
     /*

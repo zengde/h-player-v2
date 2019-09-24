@@ -168,7 +168,7 @@ module.exports = function (ctx) {
               target: 'zip',
               arch: [
                 'x64',
-                'ia32',
+                // 'ia32',
               ],
             },
           ],

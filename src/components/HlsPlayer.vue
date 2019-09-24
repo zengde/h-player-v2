@@ -97,7 +97,7 @@ export default {
 
         hls.loadSource(this.source);
         hls.attachMedia(this.video);
-        this.video.startTime = this.startTime;
+        this.video.currentTime = this.startTime;
       }
     },
   },

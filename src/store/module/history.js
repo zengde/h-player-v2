@@ -17,14 +17,28 @@ export default {
     },
   },
   actions: {
+    loadHistory(context) {
+      const storeList = store.get('historyList');
+      if (!Array.isArray(storeList)) {
+        context.commit('setHistoryList', []);
+      } else {
+        context.commit('setHistoryList', storeList);
+      }
+
+
+      return storeList;
+    },
     addHistory(context, video) {
       let storeList = store.get('historyList');
       if (!Array.isArray(storeList)) {
         context.commit('setHistoryList', [video]);
       } else {
         storeList = storeList.filter(elem => elem.name[0] !== '' && elem.name[0] !== video.name[0]);
-        storeList.push(video);
-        console.dir(storeList);
+        if (storeList.length === 20) {
+          storeList[19] = video;
+        } else {
+          storeList.push(video);
+        }
         context.commit('setHistoryList', storeList);
       }
 

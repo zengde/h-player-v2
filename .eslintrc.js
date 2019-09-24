@@ -46,9 +46,9 @@ module.exports = {
     'max-len': 'off',
 
     // allow console.log during development only
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'off' : 'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-	'linebreak-style': 0
+    'linebreak-style': 0,
   }
 }

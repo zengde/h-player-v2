@@ -149,7 +149,6 @@ export default {
           'fullscreen',
           'capture',
           'rotate',
-          'download',
         ],
         thumbnailCreate: {
           after: 'download',
