@@ -17,6 +17,17 @@ export default {
     },
   },
   actions: {
+    loadDownload(context) {
+      const storeList = store.get('downList');
+      if (!Array.isArray(storeList)) {
+        context.commit('setDownList', []);
+      } else {
+        context.commit('setDownList', storeList);
+      }
+
+
+      return storeList;
+    },
     addDown(context) {
       const storeList = store.get('downList');
       if (!Array.isArray(storeList)) {

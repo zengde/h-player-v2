@@ -86,6 +86,12 @@
                   icon="play_arrow"
                   @click="setCurrentEpisode(props)"
                 />
+                &nbsp;
+                <q-btn
+                  round
+                  color="primary"
+                  icon="save_alt"
+                />
               </q-td>
             </q-table>
           </q-tab-panel>

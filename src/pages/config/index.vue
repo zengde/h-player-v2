@@ -321,6 +321,18 @@
             label="是否自动加载图片"
           />
         </div>
+        <div class="q-pa-md">
+          <div class="q-gutter-y-md column" style="max-width: 300px">
+            <q-input dense outlined v-model="savePath" label="请选择视频下载位置" readonly>
+              <template v-slot:after>
+                <q-btn dense flat label="保存位置" @click="showFileDialog('savePath')" />
+              </template>
+              <template v-if="savePath" v-slot:append>
+                <q-icon name="cancel" @click.stop="savePath = ''" class="cursor-pointer" />
+              </template>
+            </q-input>
+          </div>
+        </div>
         <div class="q-ml-sm">
           <q-btn
             color="primary"
@@ -468,6 +480,14 @@ export default {
         this.$store.commit('setLoadImage', value);
       },
     },
+    savePath: {
+      get() {
+        return this.$store.state.app.savePath;
+      },
+      set(value) {
+        this.$store.commit('setSavePath', value);
+      },
+    },
     thumbStyle() {
       return {
         right: '2px',
@@ -577,6 +597,19 @@ export default {
     },
     isUrl(val) {
       return isAbsoluteUrl(val) || '请输入有效url';
+    },
+    // 读取文件路径 openDirectory：选择文件夹 openFile：选择文件
+    showFileDialog(name) {
+      const { dialog } = this.$q.electron.remote;
+      dialog.showOpenDialog({
+        properties: name === 'savePath' ? ['openDirectory'] : ['openFile'],
+      },
+      (filename) => {
+        if ((filename && filename.length) === 1) {
+          const [fname] = filename;
+          this[name] = fname;
+        }
+      });
     },
   },
 };

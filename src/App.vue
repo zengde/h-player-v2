@@ -22,6 +22,7 @@ export default {
     });
     this.$store.dispatch('loadSettings');
     this.$store.dispatch('loadHistory');
+    this.$store.dispatch('loadDownload');
   },
   methods: {
     ...mapMutations(['setCurrentVideo']),

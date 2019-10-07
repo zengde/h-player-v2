@@ -10,6 +10,7 @@ export default {
     loadImage: true,
     currentVersion: pkg.version,
     latestVersion: '0.0.0',
+    savePath: '',
   },
   mutations: {
     setHttps(state, status) {
@@ -17,6 +18,7 @@ export default {
       store.set('settings', {
         https: state.https,
         loadImage: state.loadImage,
+        savePath: state.savePath,
       });
     },
     setLoadImage(state, status) {
@@ -24,14 +26,24 @@ export default {
       store.set('settings', {
         https: state.https,
         loadImage: state.loadImage,
+        savePath: state.savePath,
       });
     },
     setLatestVersion(state, latestVersion) {
       state.latestVersion = latestVersion;
     },
+    setSavePath(state, savePath) {
+      state.savePath = savePath;
+      store.set('settings', {
+        https: state.https,
+        loadImage: state.loadImage,
+        savePath: state.savePath,
+      });
+    },
     setSettings(state, settings) {
       state.https = settings.https;
       state.loadImage = settings.loadImage;
+      state.savePath = settings.savePath || '';
       store.set('settings', settings);
     },
   },
@@ -55,6 +67,7 @@ export default {
         context.commit('setSettings', {
           https: true,
           loadImage: true,
+          savePath: '',
         });
       } else {
         context.commit('setSettings', settings);
