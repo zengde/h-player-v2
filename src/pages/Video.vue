@@ -88,9 +88,11 @@
                 />
                 &nbsp;
                 <q-btn
+                  v-if="props.row.url.indexOf('.m3u8') !== -1"
                   round
                   color="primary"
                   icon="save_alt"
+                  @click="addDown({video:currentVideo, url:props.row.url})"
                 />
               </q-td>
             </q-table>
@@ -212,7 +214,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addHistory']),
+    ...mapActions(['addHistory', 'addDown']),
     sliceUrl(str) {
       return str.split('#');
     },

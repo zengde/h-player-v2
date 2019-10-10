@@ -4,8 +4,8 @@
     <q-menu auto-close>
       <div class="q-pa-md q-gutter-sm">
         <q-toggle label="清空" color="red" v-model="clear" />
-        <q-btn flat label="全部启动" color="secondary" @click="startAll()" />
-        <q-btn flat label="全部暂停" color="red" @click="pauseAll()" />
+        <q-btn flat label="全部取消" color="secondary" @click="stopAll()" />
+        <q-btn flat label="全部删除" color="red" @click="delAll()" />
       </div>
       <q-list dense style="min-width: 100px" separator>
         <q-item clickable v-for="(video,k) in downList" :key="k" v-close-popup>
@@ -14,9 +14,9 @@
           </q-item-section>
           <q-item-section @click="onItemClick(video)">
             <q-item-label>{{ video.name[0] }}</q-item-label>
-            <q-item-label caption>February 22, 2016</q-item-label>
+            <q-item-label caption>{{ video.last[0] }}</q-item-label>
             <q-item-label>
-              <q-linear-progress :value="video.progress" />
+              <download-video :video="video" />
             </q-item-label>
           </q-item-section>
           <q-item-section side>
@@ -30,6 +30,7 @@
 </template>
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex';
+import downloadVideo from 'components/downloadVideo';
 
 export default {
   name: 'videoDownload',
@@ -43,6 +44,9 @@ export default {
       downList: state => state.download.downList,
     }),
   },
+  components: {
+    downloadVideo,
+  },
   watch: {
     clear(bool) {
       if (bool) {
@@ -54,12 +58,14 @@ export default {
     ...mapMutations(['setCurrentVideo']),
     ...mapActions(['removeDown', 'clearDown']),
     onItemClick(video) {
-      console.dir(video);
+      const { downFile } = video;
+      const { shell } = this.$q.electron;
+      shell.openItem(downFile);
     },
-    startAll() {
-
+    stopAll() {
+      this.clearDown();
     },
-    pauseAll() {
+    delAll() {
 
     },
   },

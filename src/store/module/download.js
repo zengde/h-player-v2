@@ -28,22 +28,61 @@ export default {
 
       return storeList;
     },
-    addDown(context) {
-      const storeList = store.get('downList');
+    addDown(context, { video, url }) {
+      let storeList = store.get('downList');
+      if (url === '' || url.indexOf('.m3u8') === -1) {
+        console.error('不是有效的m3u8下载地址!');
+        return storeList;
+      }
+      video.downUrl = url;
+      video.progress = 0;
+      video.isDownloading = true;
       if (!Array.isArray(storeList)) {
-        context.commit('setDownList', []);
+        context.commit('setDownList', [video]);
       } else {
+        storeList = storeList.filter(elem => elem.downUrl !== '' && elem.downUrl !== url);
+        if (storeList.length === 20) {
+          storeList[19] = video;
+        } else {
+          storeList.push(video);
+        }
         context.commit('setDownList', storeList);
       }
 
 
       return storeList;
     },
-    removeDown(context) {
-      context.commit('setDownList', []);
+    removeDown(context, url) {
+      let storeList = store.get('downList');
+      storeList = storeList.filter(elem => elem.downUrl !== '' && elem.downUrl !== url);
+      context.commit('setDownList', storeList);
     },
     clearDown(context) {
       context.commit('setDownList', []);
+    },
+    finishDown(context, { video, savefile }) {
+      let storeList = store.get('downList');
+      if (savefile === '' || savefile.indexOf('.mp4') === -1) {
+        console.error('不是有效的本地视频地址!');
+        return storeList;
+      }
+      video.progress = 100;
+      video.isDownloading = false;
+      video.downFile = savefile;
+      if (!Array.isArray(storeList)) {
+        context.commit('setDownList', [video]);
+      } else {
+        storeList = storeList.filter(elem => elem.downUrl !== '' && elem.downUrl !== video.downUrl);
+        if (storeList.length === 20) {
+          storeList[19] = video;
+        } else {
+          storeList.push(video);
+        }
+        context.commit('setDownList', storeList);
+      }
+
+
+      return storeList;
     },
   },
 };

@@ -9,12 +9,18 @@ h-player-v2 是基于 Quasar Framework 开发应用程序，通过 electron 包�
 + 支持视频源导入
 + 支持分类浏览与搜索
 + 特色多窗口播放模式
++ 历史记录及续播
++ 视频下载
+
+> ### Note
+>
+> 1. 为了减小体积，视频下载功能需手动下载安装 [ffmpeg](https://ffmpeg.org/download.html) 并加入环境变量
 
 ## Get Started
 
 ```bash
 # 安装依赖
-yarn install
+yarn
 # 启动开发服务器
 yarn electron:serve
 # 编译二进制包
@@ -31,7 +37,7 @@ See [Configuration Reference](https://quasar.dev/quasar-cli/quasar-conf-js).
 
 ## Windows Release
 
-对于 windows 用户提供了编译完成的应用，请到 [release](https://github.com/ZyqGitHub1/h-player-v2/releases) 页面下载最新版本
+对于 windows 用户提供了编译完成的应用，请到 [release](https://github.com/zengde/h-player-v2/releases) 页面下载最新版本
 
 ## 使用方法:
 

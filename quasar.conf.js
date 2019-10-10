@@ -65,6 +65,11 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish'),
           },
         });
+        cfg.plugins.push(               
+          new webpack.DefinePlugin({
+            'process.env.FLUENTFFMPEG_COV': false
+          })
+        );
       },
     },
 
