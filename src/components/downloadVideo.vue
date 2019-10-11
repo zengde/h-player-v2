@@ -77,7 +77,13 @@ export default {
     },
   },
   created() {
-    if (this.video.isDownloading) this.startCommand();
+    if (this.video.isDownloading) {
+      if (this.save === '') {
+        this.msg('请先设置视频下载保存地址！', 'error');
+      } else {
+        this.startCommand();
+      }
+    }
   },
   beforeDestroy() {
     this.stopCommand();

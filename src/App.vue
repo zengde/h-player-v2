@@ -5,10 +5,11 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { historyMixin } from './mixin/video';
 
 export default {
   name: 'App',
+  mixins: [historyMixin],
   created() {
     const ipc = this.$q.electron.ipcRenderer;
     ipc.on('from-mini', (event, message) => {
@@ -23,13 +24,6 @@ export default {
     this.$store.dispatch('loadSettings');
     this.$store.dispatch('loadHistory');
     this.$store.dispatch('loadDownload');
-  },
-  methods: {
-    ...mapMutations(['setCurrentVideo']),
-    gotoPlayer(video) {
-      this.setCurrentVideo(video);
-      this.$router.push('/video');
-    },
   },
 };
 </script>

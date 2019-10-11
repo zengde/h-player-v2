@@ -77,6 +77,9 @@ export default {
       console.log('HLSPlayer:watch:source');
       this.initPlayer();
     },
+    startTime(value) {
+      this.video.currentTime = value;
+    },
   },
   methods: {
     initPlayer() {

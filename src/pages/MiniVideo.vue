@@ -4,8 +4,9 @@
     padding
   >
     <hls-player
-      :source="normalizeUrl(videoUrl)"
+      :source="normalizeUrl(currentEpisode.url)"
       :options="options"
+      :startTime="startTime"
       ref="player"
     ></hls-player>
      <q-page-sticky
@@ -23,13 +24,12 @@
 </template>
 
 <script>
-import isAbsoluteUrl from 'is-absolute-url';
 import HlsPlayer from 'components/HlsPlayer';
-import normalizeUrl from 'normalize-url';
-import _get from 'lodash/get';
+import videoMixin from '../mixin/video';
 
 export default {
   name: 'MiniVideo',
+  mixins: [videoMixin],
   data() {
     return {
       options: {
@@ -46,27 +46,19 @@ export default {
           'fullscreen',
         ],
       },
-      videoUrl: '',
+      currentVideo: {},
     };
   },
   components: {
     HlsPlayer,
   },
   mounted() {
-    const videoInfo = JSON.parse(this.$route.query.video);
-    const episodeInfo = JSON.parse(this.$route.query.episode);
-    this.videoUrl = _get(episodeInfo, 'url', '');
-    document.querySelector('title').text = `${videoInfo.name[0]}-${episodeInfo.episode}`;
+    this.currentVideo = JSON.parse(this.$route.query.video);
+
+    this.initGroup(this.currentVideo, this.$route.query.h);
+    document.querySelector('title').text = `${this.currentVideo.name[0]}-${this.currentEpisode.episode}`;
   },
   methods: {
-    normalizeUrl(url) {
-      if (isAbsoluteUrl(url)) {
-        const pureUrl = url.replace(/(.*?)\$/, '').replace(/\$(.*)/, '');
-        return normalizeUrl(pureUrl, { stripWWW: false });
-      }
-
-      return '';
-    },
     maximize() {
       const ipc = this.$q.electron.ipcRenderer;
       const { getCurrentWindow } = this.$q.electron.remote;
@@ -82,7 +74,8 @@ export default {
         cancel: true,
         persistent: true,
       }).onOk(() => {
-        ipc.send('from-mini', JSON.parse(this.$route.query.video));
+        const message = this.setHistory(true);
+        ipc.send('from-mini', message);
         const window = getCurrentWindow();
         window.close();
       }).onCancel(() => {

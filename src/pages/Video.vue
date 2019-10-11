@@ -129,16 +129,14 @@
 import scrollWarp from 'components/scrollWarp';
 import viewArea from 'components/viewArea';
 import HlsPlayer from 'components/HlsPlayer';
-import normalizeUrl from 'normalize-url';
-import isAbsoluteUrl from 'is-absolute-url';
 import { mapState, mapActions } from 'vuex';
 import { stringify } from 'query-string';
 
-import _find from 'lodash/find';
-import _get from 'lodash/get';
+import videoMixin from '../mixin/video';
 
 export default {
   name: 'Videop',
+  mixins: [videoMixin],
   data() {
     return {
       options: {
@@ -189,14 +187,6 @@ export default {
         },
       ],
       episodeInfo: [],
-      currentEpisode: {
-        episode: '无',
-        url: '',
-        player: '无',
-      },
-      groupEpisodeInfo: [],
-      currentEpisodeGroup: '',
-      startTime: 0,
     };
   },
   components: {
@@ -209,42 +199,11 @@ export default {
   },
   watch: {
     currentVideo(currentVideo) {
-      console.log('watch');
-      this.initGroup(currentVideo);
+      this.initGroup(currentVideo, this.$route.query.h);
     },
   },
   methods: {
-    ...mapActions(['addHistory', 'addDown']),
-    sliceUrl(str) {
-      return str.split('#');
-    },
-    getUrlInfo(str) {
-      const splitStr = str.split('$');
-      const url = _find(splitStr, isAbsoluteUrl);
-      if (splitStr.length === 3) {
-        return {
-          episode: splitStr[0],
-          url,
-          player: splitStr[2],
-        };
-      }
-      return {
-        episode: splitStr[0],
-        url,
-        player: '无',
-      };
-    },
-
-    initUrl(str) {
-      const slicedUrl = this.sliceUrl(str);
-      return slicedUrl.map(element => this.getUrlInfo(element));
-    },
-    normalizeUrl(url) {
-      if (isAbsoluteUrl(url)) {
-        return normalizeUrl(url, { stripWWW: false });
-      }
-      return '';
-    },
+    ...mapActions(['addDown']),
     setCurrentEpisode(props) {
       this.currentEpisode = props.row;
     },
@@ -258,9 +217,8 @@ export default {
     minimize() {
       const { BrowserWindow, getCurrentWindow } = this.$q.electron.remote;
       this.pause();
-      const videoInfo = JSON.stringify(this.currentVideo);
-      const episodeInfo = JSON.stringify(this.currentEpisode);
-      const encodeUrl = stringify({ video: videoInfo, episode: episodeInfo });
+      const videoInfo = JSON.stringify(this.setHistory(true));
+      const encodeUrl = stringify({ video: videoInfo, h: '1' });
       const parentWindow = getCurrentWindow();
       const win = new BrowserWindow({
         width: 400,
@@ -284,25 +242,6 @@ export default {
         });
       }
     },
-    initGroup(video, history = '0') {
-      const groups = _get(video, 'dl[0].dd', []);
-      groups.map((element) => {
-        const uris = _get(element, '_', '');
-        element.episodeInfo = this.initUrl(uris);
-        return element;
-      });
-      this.groupEpisodeInfo = groups;
-      if (history === '1') {
-        this.currentEpisodeGroup = video.currentEpisodeGroup;
-        this.currentEpisode = video.currentEpisode;
-        this.startTime = video.startTime;
-      } else {
-        const [currentGroup] = this.groupEpisodeInfo;
-        this.currentEpisodeGroup = currentGroup.$.flag;
-        [this.currentEpisode] = currentGroup.episodeInfo;
-        this.startTime = 0;
-      }
-    },
   },
   computed: {
     ...mapState({
@@ -320,15 +259,7 @@ export default {
   },
   beforeDestroy() {
     console.log('destroyed');
-    const startTime = this.$refs.player.video.currentTime;
-    const { currentEpisodeGroup, currentEpisode } = this;
-    const currentVideo = {
-      ...this.currentVideo,
-      currentEpisodeGroup,
-      currentEpisode,
-      startTime,
-    };
-    this.addHistory(currentVideo);
+    this.setHistory();
   },
 };
 </script>

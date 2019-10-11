@@ -4,10 +4,10 @@
       <q-toggle label="清空" v-model="clear" v-show="historyList.length" />
       <q-list dense style="min-width: 100px" separator>
         <q-item clickable v-for="(video,k) in historyList" :key="k" v-close-popup>
-          <q-item-section avatar @click="onItemClick(video)">
+          <q-item-section avatar @click="gotoPlayer(video)">
             <q-img :src="video.pic[0]" color="primary" />
           </q-item-section>
-          <q-item-section @click="onItemClick(video)">
+          <q-item-section @click="gotoPlayer(video)">
             <q-item-label>{{ video.name[0] }}</q-item-label>
             <q-item-label caption>观看至 <span class="text-blue">{{ video.startTime|timeFormat }}</span></q-item-label>
           </q-item-section>
@@ -20,10 +20,12 @@
   </q-btn>
 </template>
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import { historyMixin } from '../mixin/video';
 
 export default {
   name: 'History',
+  mixins: [historyMixin],
   data() {
     return {
       clear: false,
@@ -42,23 +44,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setCurrentVideo']),
     ...mapActions(['removeHistory', 'clearHistory']),
-    onItemClick(video) {
-      this.setCurrentVideo(video);
-      const route = {
-        path: '/video',
-        query: {
-          t: Date.now(),
-          h: '1',
-        },
-      };
-      if (this.$route.path === '/video') {
-        this.$router.replace(route);
-      } else {
-        this.$router.push(route);
-      }
-    },
     removeItem(video) {
       this.removeHistory(video);
     },
