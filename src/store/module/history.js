@@ -1,7 +1,3 @@
-import Store from 'electron-store';
-
-const store = new Store();
-
 export default {
   state: {
     historyList: [],
@@ -13,25 +9,13 @@ export default {
       } else {
         state.historyList = list;
       }
-      store.set('historyList', state.historyList);
     },
   },
   actions: {
-    loadHistory(context) {
-      const storeList = store.get('historyList');
+    addHistory({ commit, state }, video) {
+      let storeList = state.historyList;
       if (!Array.isArray(storeList)) {
-        context.commit('setHistoryList', []);
-      } else {
-        context.commit('setHistoryList', storeList);
-      }
-
-
-      return storeList;
-    },
-    addHistory(context, video) {
-      let storeList = store.get('historyList');
-      if (!Array.isArray(storeList)) {
-        context.commit('setHistoryList', [video]);
+        commit('setHistoryList', [video]);
       } else {
         storeList = storeList.filter(elem => elem.name[0] !== '' && elem.name[0] !== video.name[0]);
         if (storeList.length === 20) {
@@ -39,16 +23,16 @@ export default {
         } else {
           storeList.push(video);
         }
-        context.commit('setHistoryList', storeList);
+        commit('setHistoryList', storeList);
       }
 
 
       return storeList;
     },
-    removeHistory(context, video) {
-      let storeList = store.get('historyList');
+    removeHistory({ commit, state }, video) {
+      let storeList = state.historyList;
       storeList = storeList.filter(elem => elem.name[0] !== '' && elem.name[0] !== video.name[0]);
-      context.commit('setHistoryList', storeList);
+      commit('setHistoryList', storeList);
     },
     clearHistory(context) {
       context.commit('setHistoryList', []);

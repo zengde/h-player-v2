@@ -27,6 +27,14 @@
         </div>
       </q-page>
     </q-page-container>
+    <q-uploader
+      label="Upload"
+      ref="upload"
+      style="max-width: 300px"
+      accept=".json"
+      v-show="false"
+      @added="readFile"
+    />
   </q-layout>
 </template>
 
@@ -34,7 +42,6 @@
 import footerContent from 'components/footerContent';
 import titleBar from 'components/titleBar';
 import { mapMutations, mapState } from 'vuex';
-import fs from 'fs-extra';
 
 export default {
   name: 'Import',
@@ -50,19 +57,19 @@ export default {
   methods: {
     ...mapMutations(['setSiteList']),
     async openDialog() {
-      const { dialog } = this.$q.electron.remote;
-      const dialogResult = await dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters: [{ name: 'JSON', extensions: ['json'] }],
-      });
-      if (!dialogResult.canceled && dialogResult.filePaths) {
-        const importedFile = await fs.readJSON(dialogResult.filePaths[0]);
-        this.setSiteList(importedFile);
-        this.$router.push('/');
-      }
+      this.$refs.upload.pickFiles();
     },
     configClick() {
       this.$router.push('/config');
+    },
+    readFile(files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const importedFile = JSON.parse(e.target.result);
+        this.setSiteList(importedFile);
+        this.$router.push('/');
+      };
+      reader.readAsText(files[0]);
     },
   },
 };

@@ -1,8 +1,8 @@
-# h-player-v2
+# h-player-v2 web版
 
-## 关于 h-player-v2
+## 关于 h-player-v2 web版
 
-h-player-v2 是基于 Quasar Framework 开发应用程序，通过 electron 包装，实现hls视频流的在线播放。
+h-player-v2 web版 是基于 Quasar Framework 开发应用程序，实现hls视频流的在线播放。
 
 ## 功能特色
 
@@ -10,21 +10,18 @@ h-player-v2 是基于 Quasar Framework 开发应用程序，通过 electron 包�
 + 支持分类浏览与搜索
 + 特色多窗口播放模式
 + 历史记录及续播
-+ 视频下载
-
-> ### Note
->
-> 1. 为了减小体积，视频下载功能需手动下载安装 [ffmpeg](https://ffmpeg.org/download.html) 并加入环境变量
 
 ## Get Started
+
+一个chrom浏览器
 
 ```bash
 # 安装依赖
 yarn
 # 启动开发服务器
-yarn electron:serve
+yarn serve
 # 编译二进制包
-yarn electron:build
+yarn build
 ```
 
 > ### Note
@@ -35,15 +32,12 @@ yarn electron:build
 
 See [Configuration Reference](https://quasar.dev/quasar-cli/quasar-conf-js).
 
-## Windows Release
-
-对于 windows 用户提供了编译完成的应用，请到 [release](https://github.com/zengde/h-player-v2/releases) 页面下载最新版本
 
 ## 使用方法:
 
 1. 到release下载最新版本的压缩包 <a target="_blank" href ="https://raw.githubusercontent.com/ZyqGitHub1/h-player-v2/master/screenshot/download.gif">点击查看gif</a>
 2. 解压文件到任意目录 <a target="_blank" href ="https://raw.githubusercontent.com/ZyqGitHub1/h-player-v2/master/screenshot/unzip.gif">点击查看gif</a>
-3. 运行解压目录下的h-player.exe文件
+3. 加入web服务器并打开相应的web url
 4. 未导入视频源时会显示导入视频源界面
 5. 点击`暂无视频源，点击选择文件导入`按钮
 6. 选择视频源文件导入。 <a target="_blank" href ="https://raw.githubusercontent.com/ZyqGitHub1/h-player-v2/master/screenshot/import-source.gif">点击查看gif</a> ***示例文件位于[gist](https://gist.github.com/ZyqGitHub1/104becf19ebb84f601e3d32b59418944)*** <a target="_blank" href ="https://raw.githubusercontent.com/ZyqGitHub1/h-player-v2/master/screenshot/download-sorce.gif">点击查看gif</a>

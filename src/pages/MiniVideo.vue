@@ -60,8 +60,6 @@ export default {
   },
   methods: {
     maximize() {
-      const ipc = this.$q.electron.ipcRenderer;
-      const { getCurrentWindow } = this.$q.electron.remote;
       const { player } = this.$refs.player;
       const { playing } = player;
       if (playing) {
@@ -75,8 +73,8 @@ export default {
         persistent: true,
       }).onOk(() => {
         const message = this.setHistory(true);
-        ipc.send('from-mini', message);
-        const window = getCurrentWindow();
+        // ipc.send('from-mini', message);
+        console.dir(message);
         window.close();
       }).onCancel(() => {
         if (playing) {

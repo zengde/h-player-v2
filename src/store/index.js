@@ -2,11 +2,11 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import createLogger from 'vuex/dist/logger';
+import VuexPersistence from 'vuex-persist';
 import site from './module/site';
 import video from './module/video';
 import app from './module/app';
 import history from './module/history';
-import download from './module/download';
 
 
 Vue.use(Vuex);
@@ -23,10 +23,11 @@ export default function (/* { ssrContext } */) {
       video,
       app,
       history,
-      download,
     },
 
-    plugins: [createLogger()],
+    plugins: [createLogger(), new VuexPersistence({
+      modules: ['site', 'app', 'history'],
+    }).plugin],
 
     // enable strict mode (adds overhead!)
     // for dev mode only

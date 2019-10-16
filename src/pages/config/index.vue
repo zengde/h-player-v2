@@ -321,26 +321,6 @@
             label="是否自动加载图片"
           />
         </div>
-        <div class="q-pa-md">
-          <div class="q-gutter-y-md column" style="max-width: 300px">
-            <q-input dense outlined v-model="savePath" label="请选择视频下载位置" readonly>
-              <template v-slot:after>
-                <q-btn dense flat label="保存位置" @click="showFileDialog('savePath')" />
-              </template>
-              <template v-if="savePath" v-slot:append>
-                <q-icon name="cancel" @click.stop="savePath = ''" class="cursor-pointer" />
-              </template>
-            </q-input>
-          </div>
-        </div>
-        <div class="q-ml-sm">
-          <q-btn
-            color="primary"
-            icon="bug_report"
-            label="打开开发者工具"
-            @click="toggleDevTools"
-          />
-        </div>
         <div class="text-h4 q-pa-sm">软件信息</div>
         <q-separator></q-separator>
         <div class="q-pa-sm">
@@ -378,6 +358,14 @@
         </div>
       </q-scroll-area>
     </scroll-warp>
+    <q-uploader
+      label="Upload"
+      ref="upload"
+      style="max-width: 300px"
+      accept=".json"
+      v-show="false"
+      @added="readFile"
+    />
   </q-page>
 </template>
 
@@ -386,8 +374,6 @@ import scrollWarp from 'components/scrollWarp';
 import clonedeep from 'lodash/cloneDeep';
 import { mapMutations, mapState } from 'vuex';
 import { uid } from 'quasar';
-import fs from 'fs-extra';
-import { openNewGitHubIssue } from 'electron-util';
 import isAbsoluteUrl from 'is-absolute-url';
 import dndSort from './components/dndSort';
 
@@ -480,14 +466,6 @@ export default {
         this.$store.commit('setLoadImage', value);
       },
     },
-    savePath: {
-      get() {
-        return this.$store.state.app.savePath;
-      },
-      set(value) {
-        this.$store.commit('setSavePath', value);
-      },
-    },
     thumbStyle() {
       return {
         right: '2px',
@@ -501,24 +479,29 @@ export default {
   methods: {
     ...mapMutations(['setSiteList']),
     async openDialog() {
-      const { dialog } = this.$q.electron.remote;
-      const dialogResult = await dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters: [{ name: 'JSON', extensions: ['json'] }],
-      });
-      if (!dialogResult.canceled && dialogResult.filePaths) {
-        const importedFile = await fs.readJSON(dialogResult.filePaths[0]);
+      this.$refs.upload.pickFiles();
+    },
+    readFile(files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const importedFile = JSON.parse(e.target.result);
         this.data = clonedeep(importedFile);
-      }
+      };
+      reader.readAsText(files[0]);
     },
     async saveDialog() {
-      const { dialog } = this.$q.electron.remote;
-      const dialogResult = await dialog.showSaveDialog({
-        defaultPath: 'source.json',
-      });
-      if (!dialogResult.canceled && dialogResult.filePath) {
-        await fs.writeJson(dialogResult.filePath, this.siteList);
-      }
+      const json = JSON.stringify(this.siteList);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      this.saveFile(url, 'source.json');
+    },
+    saveFile(data, filename) {
+      const saveLink = document.createElement('a');
+      saveLink.href = data;
+      saveLink.download = filename;
+      const event = document.createEvent('MouseEvents');
+      event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      saveLink.dispatchEvent(event);
     },
     addRow() {
       this.addDialog = true;
@@ -579,37 +562,10 @@ export default {
         });
     },
     createIssue() {
-      openNewGitHubIssue({
-        user: 'ZyqGitHub1',
-        repo: 'h-player-v2',
-      });
-    },
-    toggleDevTools() {
-      const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow();
-      if (win) {
-        const { webContents } = win;
-        if (webContents.isDevToolsOpened()) {
-          webContents.closeDevTools();
-        } else {
-          webContents.openDevTools();
-        }
-      }
+      window.open('https://github.com/ZyqGitHub1/h-player-v2');
     },
     isUrl(val) {
       return isAbsoluteUrl(val) || '请输入有效url';
-    },
-    // 读取文件路径 openDirectory：选择文件夹 openFile：选择文件
-    showFileDialog(name) {
-      const { dialog } = this.$q.electron.remote;
-      dialog.showOpenDialog({
-        properties: name === 'savePath' ? ['openDirectory'] : ['openFile'],
-      },
-      (filename) => {
-        if ((filename && filename.length) === 1) {
-          const [fname] = filename;
-          this[name] = fname;
-        }
-      });
     },
   },
 };

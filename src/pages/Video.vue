@@ -86,14 +86,6 @@
                   icon="play_arrow"
                   @click="setCurrentEpisode(props)"
                 />
-                &nbsp;
-                <q-btn
-                  v-if="props.row.url.indexOf('.m3u8') !== -1"
-                  round
-                  color="primary"
-                  icon="save_alt"
-                  @click="addDown({video:currentVideo, url:props.row.url})"
-                />
               </q-td>
             </q-table>
           </q-tab-panel>
@@ -129,7 +121,7 @@
 import scrollWarp from 'components/scrollWarp';
 import viewArea from 'components/viewArea';
 import HlsPlayer from 'components/HlsPlayer';
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import { stringify } from 'query-string';
 
 import videoMixin from '../mixin/video';
@@ -203,7 +195,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addDown']),
     setCurrentEpisode(props) {
       this.currentEpisode = props.row;
     },
@@ -215,23 +206,11 @@ export default {
       this.$router.go(-1);
     },
     minimize() {
-      const { BrowserWindow, getCurrentWindow } = this.$q.electron.remote;
       this.pause();
       const videoInfo = JSON.stringify(this.setHistory(true));
       const encodeUrl = stringify({ video: videoInfo, h: '1' });
-      const parentWindow = getCurrentWindow();
-      const win = new BrowserWindow({
-        width: 400,
-        height: 300,
-        useContentSize: true,
-        webPreferences: {
-          nodeIntegration: true,
-          webSecurity: false,
-        },
-        parent: parentWindow,
-      });
-      win.removeMenu();
-      win.loadURL(`${process.env.APP_URL}#/mini-video?${encodeUrl}`);
+      const url = `${process.env.APP_URL}#/mini-video?${encodeUrl}`;
+      window.open(url, '_blank', 'height=300,width=400,toolbar=0,status=0,location=0,menubar=0');
     },
     errorHandler(event, data) {
       if (data.details && data.details === 'manifestLoadError') {

@@ -18,7 +18,6 @@
     />
 
     <play-history />
-    <download-queue />
 
     <q-btn
       dense
@@ -43,7 +42,6 @@
 
 <script>
 import PlayHistory from '../layouts/History.vue';
-import DownloadQueue from '../layouts/VideoDownload.vue';
 
 export default {
   name: 'titleBar',
@@ -57,7 +55,6 @@ export default {
   },
   components: {
     PlayHistory,
-    DownloadQueue,
   },
   methods: {
     minimize() {

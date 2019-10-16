@@ -1,7 +1,3 @@
-import Store from 'electron-store';
-
-const store = new Store();
-
 export default {
   state: {
     siteList: [],
@@ -25,19 +21,18 @@ export default {
       } else {
         state.siteList = siteList;
       }
-      store.set('siteList', state.siteList);
     },
   },
   getters: {
     currentSite: state => state.siteList.find(item => item.id === state.currentSiteId),
   },
   actions: {
-    loadSiteList(context) {
-      const storeSiteList = store.get('siteList');
+    loadSiteList({ commit, state }) {
+      const storeSiteList = state.siteList;
       if (!Array.isArray(storeSiteList)) {
-        context.commit('setSiteList', []);
+        commit('setSiteList', []);
       } else {
-        context.commit('setSiteList', storeSiteList);
+        commit('setSiteList', storeSiteList);
       }
 
 
