@@ -11,12 +11,16 @@ export default {
   name: 'App',
   mixins: [historyMixin],
   created() {
-    /*
-    const ipc = this.$q.electron.ipcRenderer;
-    ipc.on('from-mini', (event, message) => {
-      this.gotoPlayer(message);
-    });
-    */
+    window.addEventListener('message', (e) => {
+      const {
+        data: {
+          message,
+          from = '',
+        },
+      } = e;
+      if (from === 'mini-video') this.gotoPlayer(message);
+    }, false);
+
     this.$store.dispatch('getLatestVersion');
     this.$store.dispatch('loadSiteList').then((storeSiteList) => {
       if (!storeSiteList || storeSiteList.length === 0) {

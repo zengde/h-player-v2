@@ -1,11 +1,11 @@
 const routes = [
   {
     path: '/import',
-    component: () => import('layouts/Import'),
+    component: () => import(/* webpackChunkName: "import" */ 'layouts/Import'),
   },
   {
     path: '/',
-    component: () => import('layouts/Home'),
+    component: () => import(/* webpackChunkName: "home" */ 'layouts/Home'),
     children: [
       { path: '', component: () => import('pages/VideoList') },
       { path: 'video', component: () => import('pages/Video') },
@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/config',
-    component: () => import('layouts/Config'),
+    component: () => import(/* webpackChunkName: "config" */ 'layouts/Config'),
     children: [{ path: '', component: () => import('pages/config') }],
   },
 ];

@@ -73,8 +73,7 @@ export default {
         persistent: true,
       }).onOk(() => {
         const message = this.setHistory(true);
-        // ipc.send('from-mini', message);
-        console.dir(message);
+        window.opener.postMessage({ from: 'mini-video', message }, window.location.origin);
         window.close();
       }).onCancel(() => {
         if (playing) {
