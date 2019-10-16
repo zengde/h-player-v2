@@ -4,6 +4,12 @@
 
 h-player-v2 是基于 Quasar Framework 开发应用程序，通过 electron 包装，实现hls视频流的在线播放。
 
+## 相关版本
++ [web](https://github.com/zengde/h-player-v2/tree/web 'web')
++ mobile
++ flutter
+
+
 ## 功能特色
 
 + 支持视频源导入
