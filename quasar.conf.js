@@ -183,5 +183,9 @@ module.exports = function (ctx) {
         },
       },
     },
+
+    bin: {
+      "windowsAndroidStudio": "E:\\Program Files\\Android\\android-studio\\bin\\studio64.exe",
+    },
   };
 };
