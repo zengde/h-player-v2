@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">h-player</string>
+    <string name="title_activity_main">h-player</string>
+    <string name="package_name">org.cordova.quasar.app</string>
+    <string name="fileprovider_authority">org.cordova.quasar.app.fileprovider</string>
+    <string name="custom_url_scheme">org.cordova.quasar.app</string>
+</resources>

@@ -15,6 +15,7 @@
             color="primary"
             label="暂无视频源，点击选择文件导入"
             @click="openDialog"
+            v-show="false"
           />
           <span class="q-pa-sm">或前往</span>
           <q-btn
@@ -27,14 +28,6 @@
         </div>
       </q-page>
     </q-page-container>
-    <q-uploader
-      label="Upload"
-      ref="upload"
-      style="max-width: 300px"
-      accept=".json"
-      v-show="false"
-      @added="readFile"
-    />
   </q-layout>
 </template>
 
@@ -57,19 +50,16 @@ export default {
   methods: {
     ...mapMutations(['setSiteList']),
     async openDialog() {
-      this.$refs.upload.pickFiles();
+      fileChooser.open({}, (uri) => {
+        this.readFile(uri);
+      }, e => console.log(e));
     },
     configClick() {
       this.$router.push('/config');
     },
-    readFile(files) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const importedFile = JSON.parse(e.target.result);
-        this.setSiteList(importedFile);
-        this.$router.push('/');
-      };
-      reader.readAsText(files[0]);
+    readFile(file) {
+      // todo native file reader
+      console.dir(file);
     },
   },
 };

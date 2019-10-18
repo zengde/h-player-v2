@@ -25,3 +25,4 @@ yarn-error.log*
 
 hls-source/
 yarn.lock
+key.properties

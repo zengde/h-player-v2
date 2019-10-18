@@ -5,7 +5,12 @@
 </template>
 
 <script>
+import {
+  Plugins,
+} from '@capacitor/core';
 import { historyMixin } from './mixin/video';
+
+const { StatusBar } = Plugins;
 
 export default {
   name: 'App',
@@ -27,6 +32,8 @@ export default {
         this.$router.push('/import');
       }
     });
+
+    StatusBar.hide();
   },
 };
 </script>

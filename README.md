@@ -14,8 +14,17 @@ quasar dev -m capacitor -T android
 quasar build -m capacitor -T android
 ```
 ### ios
+todo
+
+### 安装插件
+```bash
+npx cordova plugin add cordova-plugin-name
+或
+npm install cordova-plugin-name
+
+npx cap sync
+```
 
 ## TODO
 
-- [ ] cors跨域 native http plugin替换
-- [ ] file picker,
+
