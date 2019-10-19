@@ -9,21 +9,25 @@
       <footer-content></footer-content>
     </q-footer>
     <q-page-container>
-      <q-page class="flex">
-        <div style="flex: auto" class="flex justify-center items-center">
-          <q-btn
-            color="primary"
-            label="暂无视频源，点击选择文件导入"
-            @click="openDialog"
-          />
-          <span class="q-pa-sm">或前往</span>
-          <q-btn
-            color="primary"
-            icon="settings"
-            label="设置"
-            @click="configClick"
-          />
-          <span class="q-pa-sm">页面手动添加</span>
+      <q-page class="row justify-center items-center">
+        <div class="row q-col-gutter-md justify-center items-center">
+          <div class="col-auto">
+            <q-btn
+              color="primary"
+              label="暂无视频源，点击选择文件导入"
+              @click="openDialog"
+            />
+          </div>
+          <div class="col-auto"><span class="q-pa-sm">或前往</span></div>
+          <div class="col-auto">
+            <q-btn
+              color="primary"
+              icon="settings"
+              label="设置"
+              @click="configClick"
+            />
+          </div>
+          <div class="col-auto"><span class="q-pa-sm">页面手动添加</span></div>
         </div>
       </q-page>
     </q-page-container>

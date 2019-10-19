@@ -22,6 +22,8 @@
             row-key="id"
             :filter="filter"
             :loading="loading"
+            :dense="$q.screen.xs"
+            style="width:calc(100vw - 16px);"
           >
             <template v-slot:top>
               <q-btn
@@ -160,7 +162,7 @@
             v-model="addDialog"
             persistent
           >
-            <q-card style="min-width: 400px">
+            <q-card :style="dialogStyle">
               <q-card-section class="row items-center">
                 <div class="text-h6">添加视频源</div>
                 <q-space />
@@ -225,7 +227,7 @@
             v-model="sortDialog"
             persistent
           >
-            <q-card style="min-width: 400px">
+            <q-card :style="dialogStyle">
               <q-card-section class="row items-center">
                 <div class="text-h6">拖动排序</div>
                 <q-space />
@@ -474,6 +476,10 @@ export default {
         width: '5px',
         opacity: 0.75,
       };
+    },
+    dialogStyle() {
+      const isXs = this.$q.screen.xs;
+      return isXs ? { width: '100%' } : { minWidth: '400px' };
     },
   },
   methods: {
