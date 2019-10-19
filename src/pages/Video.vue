@@ -8,15 +8,13 @@
         :thumb-style="thumbStyle"
         class="fit"
       >
-        <viewArea>
-          <hls-player
-            :source="normalizeUrl(currentEpisode.url)"
-            :options="options"
-            :startTime="startTime"
-            @hls-error="errorHandler"
-            ref="player"
-          ></hls-player>
-        </viewArea>
+        <hls-player
+          :source="normalizeUrl(currentEpisode.url)"
+          :options="options"
+          :startTime="startTime"
+          @hls-error="errorHandler"
+          ref="player"
+        ></hls-player>
         <q-expansion-item
           icon="info"
           :label="`${currentVideo.name[0]}-${currentEpisode.episode}`"
@@ -68,6 +66,8 @@
               :data="value.episodeInfo"
               :columns="columns"
               row-key="name"
+              :dense="$q.screen.xs"
+              :style="tableWidth"
             >
               <q-td
                 slot="body-cell-actions"
@@ -119,7 +119,7 @@
 
 <script>
 import scrollWarp from 'components/scrollWarp';
-import viewArea from 'components/viewArea';
+// import viewArea from 'components/viewArea';
 import HlsPlayer from 'components/HlsPlayer';
 import { mapState } from 'vuex';
 import { stringify } from 'query-string';
@@ -153,6 +153,7 @@ export default {
           width: 220,
           height: 170,
         },
+        ratio: '1920:960',
       },
       columns: [
         {
@@ -184,7 +185,7 @@ export default {
   components: {
     HlsPlayer,
     scrollWarp,
-    viewArea,
+    // viewArea,
   },
   mounted() {
     this.initGroup(this.currentVideo, this.$route.query.h);
@@ -234,6 +235,9 @@ export default {
         width: '5px',
         opacity: 0.75,
       };
+    },
+    tableWidth() {
+      return this.$q.screen.xs ? { width: 'calc(100vw - 48px)' } : {};
     },
   },
   beforeDestroy() {

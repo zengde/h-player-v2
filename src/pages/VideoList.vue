@@ -55,7 +55,7 @@
                 <q-img
                   :src="video.pic[0]"
                   spinner-color="red"
-                  style="height: 200px;width: 290px"
+                  :ratio="4/3"
                 >
                   <div
                     class="absolute-bottom ellipsis text-subtitle1 text-center q-pa-xs"
@@ -83,7 +83,7 @@
                 <q-img
                   src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="
                   spinner-color="red"
-                  style="height: 200px;width: 290px"
+                  :ratio="4/3"
                 >
                   <div
                     class="absolute-bottom ellipsis text-subtitle1 text-center q-pa-xs"
