@@ -153,7 +153,6 @@ export default {
           width: 220,
           height: 170,
         },
-        ratio: '1920:960',
       },
       columns: [
         {
