@@ -38,6 +38,9 @@
 import footerContent from 'components/footerContent';
 import titleBar from 'components/titleBar';
 import { mapMutations, mapState } from 'vuex';
+import { Plugins, FilesystemEncoding } from '@capacitor/core';
+
+const { Filesystem } = Plugins;
 
 export default {
   name: 'Import',
@@ -54,15 +57,27 @@ export default {
     ...mapMutations(['setSiteList']),
     async openDialog() {
       fileChooser.open({}, (uri) => {
-        this.readFile(uri);
+        if (uri.indexOf('.json') === -1) {
+          this.$q.dialog({
+            title: 'Alert',
+            message: '请选择有效的json文件！',
+          });
+        } else {
+          this.readFile(uri);
+        }
       }, e => console.log(e));
     },
     configClick() {
       this.$router.push('/config');
     },
-    readFile(file) {
-      // todo native file reader
-      console.dir(file);
+    async readFile(file) {
+      // console.log(file);
+      const contents = await Filesystem.readFile({
+        path: file,
+        encoding: FilesystemEncoding.UTF8,
+      });
+      this.setSiteList(JSON.parse(contents.data));
+      this.$router.push('/');
     },
   },
 };

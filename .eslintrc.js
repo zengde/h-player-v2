@@ -52,5 +52,6 @@ module.exports = {
     'linebreak-style': 0,
     'no-underscore-dangle': 0,
     'no-undef': 0,
+    'space-before-function-paren': 0,
   }
 }

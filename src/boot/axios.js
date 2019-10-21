@@ -1,5 +1,5 @@
-// import axios from 'axios';
+import axios from '../api/apiNative';
 
 export default async ({ Vue }) => {
-  Vue.prototype.$axios = cordova.plugin.http;
+  Vue.prototype.$axios = axios;
 };

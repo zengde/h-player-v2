@@ -360,14 +360,6 @@
         </div>
       </q-scroll-area>
     </scroll-warp>
-    <q-uploader
-      label="Upload"
-      ref="upload"
-      style="max-width: 300px"
-      accept=".json"
-      v-show="false"
-      @added="readFile"
-    />
   </q-page>
 </template>
 
@@ -377,7 +369,10 @@ import clonedeep from 'lodash/cloneDeep';
 import { mapMutations, mapState } from 'vuex';
 import { uid } from 'quasar';
 import isAbsoluteUrl from 'is-absolute-url';
+import { Plugins, FilesystemEncoding } from '@capacitor/core';
 import dndSort from './components/dndSort';
+
+const { Filesystem } = Plugins;
 
 export default {
   name: 'Config',
@@ -485,15 +480,24 @@ export default {
   methods: {
     ...mapMutations(['setSiteList']),
     async openDialog() {
-      this.$refs.upload.pickFiles();
+      fileChooser.open({}, (uri) => {
+        if (uri.indexOf('.json') === -1) {
+          this.$q.dialog({
+            title: 'Alert',
+            message: '请选择有效的json文件！',
+          });
+        } else {
+          this.readFile(uri);
+        }
+      }, e => console.log(e));
     },
-    readFile(files) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const importedFile = JSON.parse(e.target.result);
-        this.data = clonedeep(importedFile);
-      };
-      reader.readAsText(files[0]);
+    async readFile(file) {
+      let contents = await Filesystem.readFile({
+        path: file,
+        encoding: FilesystemEncoding.UTF8,
+      });
+      contents = JSON.parse(contents.data);
+      this.data = clonedeep(contents);
     },
     async saveDialog() {
       const json = JSON.stringify(this.siteList);
