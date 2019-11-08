@@ -1,5 +1,7 @@
 # h-player-v2
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/zengde/h-player-v2.svg)](https://greenkeeper.io/)
+
 ## 关于 h-player-v2
 
 h-player-v2 是基于 Quasar Framework 开发应用程序，通过 electron 包装，实现hls视频流的在线播放。
